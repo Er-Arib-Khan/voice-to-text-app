@@ -1,6 +1,6 @@
 body {
   font-family: 'Segoe UI', sans-serif;
-  background: #a9ffee;
+  background: #e1f3dd;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32,7 +32,7 @@ button {
   border: none;
   border-radius: 8px;
   background-color: #4CAF50;
-  color: white;
+  color: rgb(255, 255, 255);
   cursor: pointer;
 }
 
