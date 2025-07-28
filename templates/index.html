@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Voice Complain Logger</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🎙 Voice Complain Logger</h1>
+    <textarea id="complaintText" placeholder="Your complaint will appear here..." rows="6"></textarea>
+    <br/>
+    <button onclick="startRecognition()">🎤 Speak</button>
+    <button onclick="submitComplaint()">🚀 Submit</button>
+    <p id="status"></p>
+  </div>
+
+  <script>
+    let recognition;
+    function startRecognition() {
+      recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'en-IN';
+      recognition.start();
+
+      recognition.onresult = function(event) {
+        document.getElementById('complaintText').value = event.results[0][0].transcript;
+      };
+
+      recognition.onerror = function(event) {
+        document.getElementById('status').innerText = "Error: " + event.error;
+      };
+    }
+
+    async function submitComplaint() {
+      const complaint = document.getElementById("complaintText").value;
+      if (!complaint.trim()) return alert("Please say or type a complaint.");
+      
+      const response = await fetch("/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ complaint })
+      });
+
+      const result = await response.json();
+      document.getElementById("status").innerText = result.message;
+      document.getElementById("complaintText").value = "";
+    }
+  </script>
+</body>
+</html>
